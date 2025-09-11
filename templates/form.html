@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if evento %}Editar{% else %}Nuevo{% endif %} Evento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="mb-4">{% if evento %}✏️ Editar{% else %}➕ Nuevo{% endif %} Evento</h1>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">⬅️ Volver</a>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del creador</label>
+                        <input type="text" name="creador" class="form-control" 
+                               value="{{ evento[1] if evento else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del evento</label>
+                        <input type="text" name="nombre" class="form-control" 
+                               value="{{ evento[2] if evento else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" name="fecha" class="form-control" 
+                               value="{{ evento[3] if evento else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Hora de inicio</label>
+                        <input type="time" name="hora" class="form-control" 
+                               value="{{ evento[4] if evento else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea name="descripcion" class="form-control" rows="4">{{ evento[5] if evento else '' }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Imagen (opcional)</label>
+                        <input type="file" name="imagen" class="form-control">
+                    </div>
+
+                    {% if evento and evento[6] %}
+                        <div class="mb-3">
+                            <p>Imagen actual:</p>
+                            <img src="{{ url_for('uploaded_file', filename=evento[6]) }}" 
+                                 alt="Imagen del evento" class="img-fluid rounded shadow-sm" width="200">
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary">
+                        {% if evento %}Actualizar{% else %}Guardar{% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

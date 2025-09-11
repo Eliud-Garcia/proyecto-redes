@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card-title {
+            font-weight: bold;
+        }
+
+        /* 📱 Estilos mejorados para móviles */
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .card {
+                margin-bottom: 2rem;
+                padding: 1rem;
+                border-radius: 15px;
+                transform: scale(1.03); /* un poquito más grande */
+            }
+            .card-title {
+                font-size: 1.5rem;
+            }
+            .card-subtitle {
+                font-size: 1.2rem;
+            }
+            .card-text {
+                font-size: 1.25rem;
+                line-height: 1.6;
+            }
+            .btn {
+                font-size: 1.2rem;
+                padding: 0.9rem;
+            }
+            .card img {
+                max-height: 280px; /* más alta */
+                object-fit: cover;
+                border-radius: 12px 12px 0 0;
+            }
+            .card-footer {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .card-footer .btn {
+                width: 100%; /* botones ocupan todo el ancho */
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <h1 class="text-center mb-4">📅 Lista de Eventos</h1>
+
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{{ url_for('nuevo') }}" class="btn btn-success">➕ Nuevo Evento</a>
+            {% if mostrar_todos %}
+                <a href="{{ url_for('index') }}" class="btn btn-outline-primary">📌 Ver solo próximos</a>
+            {% else %}
+                <a href="{{ url_for('todos') }}" class="btn btn-outline-secondary">📜 Ver todos</a>
+            {% endif %}
+        </div>
+
+        {% if eventos %}
+            <div class="row">
+                {% for e in eventos %}
+                <!-- ✅ Card ocupa toda la fila en móvil -->
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        {% if e[6] %}
+                            <img src="{{ url_for('uploaded_file', filename=e[6]) }}" class="card-img-top" alt="Imagen del evento">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ e[2] }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Creador: {{ e[1] }}</h6>
+                            <p class="card-text">
+                                📅 {{ e[3] }} <br>
+                                🕒 {{ e[4] }} <br>
+                                <em>{{ e[5] }}</em>
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ url_for('editar', id=e[0]) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                            <a href="{{ url_for('eliminar', id=e[0]) }}" 
+                               onclick="return confirm('¿Eliminar este evento?')" 
+                               class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">No hay eventos registrados.</div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
