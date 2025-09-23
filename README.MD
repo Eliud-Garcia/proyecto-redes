@@ -1,29 +1,47 @@
-# IMPORTANTE
-## si clonas el repositorio borra la carpeta venv
-esto es para que lo configures con los siguientes pasos para evitar problemas
+# REQUISITOS
 
+Para poder ejecutar este pequeño proyecto debes tener instalado lo siguiente:
+* Python 
+* Postgres
+
+puedes instalar python con los siguientes comandos
+```sh
 sudo apt update
 sudo apt install -y python3 python3-venv python3-pip
+```
 
-# crear entorno virtual
+
+## crear entorno virtual
+```sh
 python3 -m venv venv
+```
 
-# activarlo
+
+## activarlo
+
+```sh
 source venv/bin/activate
+```
 
-# actualizar pip dentro de env
+## actualizar pip dentro de env
+
+```sh
 pip install --upgrade pip
+```
 
-
-# instala dependencias del proyecto
-# postgres
+## instala dependencias del proyecto
+```sh
 pip install flask psycopg2-binary
-# pillow
 pip install pillow
 
+```
 
-# ejecuta
+## ejecuta
+```sh
 python app.py
+```
 
-# desactivar el env
+## desactivar el env
+```sh
 deactivate
+```
