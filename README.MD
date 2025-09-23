@@ -16,7 +16,9 @@ pip install --upgrade pip
 
 
 # instala dependencias del proyecto
+# postgres
 pip install flask psycopg2-binary
+# pillow
 pip install pillow
 
 
