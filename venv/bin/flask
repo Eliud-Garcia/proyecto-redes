@@ -1,4 +1,4 @@
-#!/home/eliud/Escritorio/programming/redes/venv/bin/python3
+#!/home/eliud/Escritorio/programming/proyecto-redes/venv/bin/python3
 import sys
 from flask.cli import main
 if __name__ == '__main__':
