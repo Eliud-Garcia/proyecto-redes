@@ -2,74 +2,119 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- ✅ Importante para móviles -->
     <title>Eventos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background-color: #f8f9fa;
+            font-family: "Segoe UI", Roboto, sans-serif;
         }
+
+        h1 {
+            font-weight: 700;
+        }
+
+        .card {
+            border-radius: 15px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
         .card-title {
             font-weight: bold;
         }
 
-        /* 📱 Estilos mejorados para móviles */
+        .card img {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .card-footer .btn {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        /* 📱 Mejoras para pantallas pequeñas */
         @media (max-width: 576px) {
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.7rem;
             }
-            .card {
-                margin-bottom: 2rem;
-                padding: 1rem;
-                border-radius: 15px;
-                transform: scale(1.03); /* un poquito más grande */
-            }
-            .card-title {
-                font-size: 1.5rem;
-            }
-            .card-subtitle {
-                font-size: 1.2rem;
-            }
-            .card-text {
-                font-size: 1.25rem;
-                line-height: 1.6;
-            }
+
             .btn {
-                font-size: 1.2rem;
-                padding: 0.9rem;
+                font-size: 1rem;
+                padding: 0.8rem;
             }
+
+            .card {
+                margin-bottom: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+            }
+
+            .card-subtitle {
+                font-size: 1rem;
+            }
+
+            .card-text {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+
             .card img {
-                max-height: 280px; /* más alta */
-                object-fit: cover;
-                border-radius: 12px 12px 0 0;
+                height: 250px;
             }
-            .card-footer {
+
+            .d-flex.justify-content-between.mb-3 {
                 flex-direction: column;
                 gap: 0.75rem;
             }
-            .card-footer .btn {
-                width: 100%; /* botones ocupan todo el ancho */
+
+            .d-flex.justify-content-between.mb-3 .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
+
 <body class="bg-light">
     <div class="container py-4">
         <h1 class="text-center mb-4">📅 Lista de Eventos</h1>
 
-        <div class="d-flex justify-content-between mb-3">
-            <a href="{{ url_for('nuevo') }}" class="btn btn-success">➕ Nuevo Evento</a>
+        <!-- Botones superiores -->
+        <div class="d-flex justify-content-between mb-3 flex-wrap gap-2">
+            <a href="{{ url_for('nuevo') }}" class="btn btn-success flex-fill">➕ Nuevo Evento</a>
             {% if mostrar_todos %}
-                <a href="{{ url_for('index') }}" class="btn btn-outline-primary">📌 Ver solo próximos</a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-primary flex-fill">📌 Ver solo próximos</a>
             {% else %}
-                <a href="{{ url_for('todos') }}" class="btn btn-outline-secondary">📜 Ver todos</a>
+                <a href="{{ url_for('todos') }}" class="btn btn-outline-secondary flex-fill">📜 Ver todos</a>
             {% endif %}
         </div>
 
+        <!-- Lista de eventos -->
         {% if eventos %}
-            <div class="row">
+            <div class="row justify-content-center">
                 {% for e in eventos %}
-                <!-- ✅ Card ocupa toda la fila en móvil -->
-                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="col-12 col-sm-10 col-md-6 col-lg-4 mb-4">
                     <div class="card shadow-sm h-100">
                         {% if e[6] %}
                             <img src="{{ url_for('uploaded_file', filename=e[6]) }}" class="card-img-top" alt="Imagen del evento">
@@ -83,11 +128,11 @@
                                 <em>{{ e[5] }}</em>
                             </p>
                         </div>
-                        <div class="card-footer d-flex justify-content-between">
-                            <a href="{{ url_for('editar', id=e[0]) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
+                        <div class="card-footer">
+                            <a href="{{ url_for('editar', id=e[0]) }}" class="btn btn-warning btn-sm">✏️ Editar</a>
                             <a href="{{ url_for('eliminar', id=e[0]) }}" 
                                onclick="return confirm('¿Eliminar este evento?')" 
-                               class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+                               class="btn btn-danger btn-sm">🗑️ Eliminar</a>
                         </div>
                     </div>
                 </div>
