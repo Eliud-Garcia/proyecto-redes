@@ -2,12 +2,20 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import psycopg2
 import os
 from werkzeug.utils import secure_filename
+from datetime import datetime
+
 
 # Configuración de Flask
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+#para mostrar la fecha actual
+@app.context_processor
+def inject_current_year():
+    return {'current_year': datetime.now().year}
+
 
 # Conexión a PostgreSQL
 def get_db_connection():

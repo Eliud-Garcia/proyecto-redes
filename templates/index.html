@@ -96,7 +96,7 @@
     </style>
 </head>
 
-<body class="bg-light">
+<body class="d-flex flex-column min-vh-100 bg-light">
     <div class="container py-4">
         <h1 class="text-center mb-4">📅 Lista de Eventos</h1>
 
@@ -142,6 +142,7 @@
             <div class="alert alert-info text-center">No hay eventos registrados.</div>
         {% endif %}
     </div>
+    {% include './footer.html' %}
 
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>

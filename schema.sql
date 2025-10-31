@@ -1,4 +1,3 @@
---tabla 
 CREATE TABLE IF NOT EXISTS eventos (
     id SERIAL PRIMARY KEY,
     creador VARCHAR(100),
@@ -6,15 +5,9 @@ CREATE TABLE IF NOT EXISTS eventos (
     fecha DATE,
     hora TIME,
     descripcion TEXT,
-    imagen VARCHAR(300)
+    imagen VARCHAR(200),
+    activo BOOLEAN DEFAULT TRUE
 );
 
---se modifico, entonces agregar los cambios
-ALTER TABLE eventos ALTER COLUMN imagen TYPE VARCHAR(200);
-ALTER TABLE eventos ADD COLUMN activo BOOLEAN DEFAULT TRUE;
-
-
---mostrar los eventos
+-- Verificar los datos
 SELECT * FROM eventos;
-
-
