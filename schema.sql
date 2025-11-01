@@ -9,5 +9,15 @@ CREATE TABLE IF NOT EXISTS eventos (
     activo BOOLEAN DEFAULT TRUE
 );
 
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    rol VARCHAR(20) DEFAULT 'usuario'  -- puede ser 'usuario' o 'admin'
+);
+
+
 -- Verificar los datos
 SELECT * FROM eventos;
+SELECT * FROM usuarios;

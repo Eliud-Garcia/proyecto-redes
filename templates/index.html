@@ -1,149 +1,47 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- ✅ Importante para móviles -->
-    <title>Eventos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+{% extends "base.html" %}
+{% block title %}Inicio - Eventos{% endblock %}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4 text-center fw-bold">Próximos Eventos</h2>
 
-        body {
-            background-color: #f8f9fa;
-            font-family: "Segoe UI", Roboto, sans-serif;
-        }
+    {% if eventos %}
+    <!-- Usamos row-cols para crear un layout adaptable -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        {% for e in eventos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                {% if e[6] %}
+                <!-- Imagen desde uploads -->
+                <img src="{{ url_for('uploaded_file', filename=e[6]) }}" class="card-img-top object-fit-cover" alt="Imagen del evento" style="height: 200px;">
+                {% else %}
+                <!-- Imagen por defecto -->
+                <img src="{{ url_for('static', filename='default_event.jpg') }}" class="card-img-top object-fit-cover" alt="Sin imagen" style="height: 200px;">
+                {% endif %}
 
-        h1 {
-            font-weight: 700;
-        }
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-primary">{{ e[2] }}</h5>
+                    <p class="card-text flex-grow-1 text-muted">{{ e[5] }}</p>
 
-        .card {
-            border-radius: 15px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+                    <p class="mb-2"><strong>Fecha:</strong> {{ e[3] }} | <strong>Hora:</strong> {{ e[4] }}</p>
+                    <p class="text-muted"><small>Creado por: {{ e[1] }}</small></p>
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-title {
-            font-weight: bold;
-        }
-
-        .card img {
-            height: 200px;
-            object-fit: cover;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .card-footer .btn {
-            flex: 1;
-            min-width: 100px;
-        }
-
-        /* 📱 Mejoras para pantallas pequeñas */
-        @media (max-width: 576px) {
-            h1 {
-                font-size: 1.7rem;
-            }
-
-            .btn {
-                font-size: 1rem;
-                padding: 0.8rem;
-            }
-
-            .card {
-                margin-bottom: 1.5rem;
-            }
-
-            .card-title {
-                font-size: 1.25rem;
-            }
-
-            .card-subtitle {
-                font-size: 1rem;
-            }
-
-            .card-text {
-                font-size: 1rem;
-                line-height: 1.5;
-            }
-
-            .card img {
-                height: 250px;
-            }
-
-            .d-flex.justify-content-between.mb-3 {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-
-            .d-flex.justify-content-between.mb-3 .btn {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
-
-<body class="d-flex flex-column min-vh-100 bg-light">
-    <div class="container py-4">
-        <h1 class="text-center mb-4">📅 Lista de Eventos</h1>
-
-        <!-- Botones superiores -->
-        <div class="d-flex justify-content-between mb-3 flex-wrap gap-2">
-            <a href="{{ url_for('nuevo') }}" class="btn btn-success flex-fill">➕ Nuevo Evento</a>
-            {% if mostrar_todos %}
-                <a href="{{ url_for('index') }}" class="btn btn-outline-primary flex-fill">📌 Ver solo próximos</a>
-            {% else %}
-                <a href="{{ url_for('todos') }}" class="btn btn-outline-secondary flex-fill">📜 Ver todos</a>
-            {% endif %}
-        </div>
-
-        <!-- Lista de eventos -->
-        {% if eventos %}
-            <div class="row justify-content-center">
-                {% for e in eventos %}
-                <div class="col-12 col-sm-10 col-md-6 col-lg-4 mb-4">
-                    <div class="card shadow-sm h-100">
-                        {% if e[6] %}
-                            <img src="{{ url_for('uploaded_file', filename=e[6]) }}" class="card-img-top" alt="Imagen del evento">
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ e[2] }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Creador: {{ e[1] }}</h6>
-                            <p class="card-text">
-                                📅 {{ e[3] }} <br>
-                                🕒 {{ e[4] }} <br>
-                                <em>{{ e[5] }}</em>
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="{{ url_for('editar', id=e[0]) }}" class="btn btn-warning btn-sm">✏️ Editar</a>
-                            <a href="{{ url_for('eliminar', id=e[0]) }}" 
-                               onclick="return confirm('¿Eliminar este evento?')" 
-                               class="btn btn-danger btn-sm">🗑️ Eliminar</a>
-                        </div>
+                    {% if session.username and (session.username == e[1] or session.rol == 'admin') %}
+                    <div class="mt-2">
+                        <a href="{{ url_for('editar_evento', evento_id=e[0]) }}" class="btn btn-warning btn-sm me-2">Editar</a>
+                        <form action="{{ url_for('eliminar_evento', evento_id=e[0]) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
                     </div>
+                    {% endif %}
                 </div>
-                {% endfor %}
             </div>
-        {% else %}
-            <div class="alert alert-info text-center">No hay eventos registrados.</div>
-        {% endif %}
+        </div>
+        {% endfor %}
     </div>
-    {% include './footer.html' %}
 
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-</body>
-</html>
+    {% else %}
+    <p class="text-center text-muted mt-5">No hay eventos próximos.</p>
+    {% endif %}
+</div>
+{% endblock %}

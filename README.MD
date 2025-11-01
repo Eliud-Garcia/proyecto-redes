@@ -41,6 +41,7 @@ pip install --upgrade pip
 ```sh
 pip install flask psycopg2-binary
 pip install pillow
+pip install flask werkzeug
 
 ```
 

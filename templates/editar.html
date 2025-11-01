@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Editar Evento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h3 class="mb-4 text-center">Editar Evento</h3>
+        
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Nombre del evento</label>
+                <input type="text" class="form-control" name="nombre" value="{{ evento[2] }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-control" name="fecha" value="{{ evento[3] }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hora</label>
+                <input type="time" class="form-control" name="hora" value="{{ evento[4] }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" rows="3">{{ evento[5] }}</textarea>
+            </div>
+
+            <!-- Imagen actual -->
+            {% if evento[6] %}
+            <div class="mb-3 text-center">
+                <p><strong>Imagen actual:</strong></p>
+                <img src="{{ url_for('uploaded_file', filename=evento[6]) }}" alt="Imagen actual" class="img-fluid rounded mb-2" style="max-height: 200px;">
+            </div>
+            {% endif %}
+
+            <!-- Subir nueva imagen -->
+            <div class="mb-3">
+                <label class="form-label">Cambiar imagen (opcional)</label>
+                <input type="file" class="form-control" name="imagen" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Actualizar Evento</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

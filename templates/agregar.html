@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Agregar Evento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pb-5">
+    <div class="col-md-8">
+        <h3 class="mb-4 text-center">Agregar Nuevo Evento</h3>
+
+        <!-- Formulario de nuevo evento -->
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Nombre del evento</label>
+                <input type="text" class="form-control" name="nombre" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-control" name="fecha" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hora</label>
+                <input type="time" class="form-control" name="hora" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Subir imagen (opcional)</label>
+                <input type="file" class="form-control" name="imagen" accept="image/*">
+                <div class="form-text">Formatos permitidos: JPG, PNG, GIF</div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Guardar Evento</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Registro de Usuario{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h3 class="text-center mb-4 fw-bold text-primary">🧾 Registro de Usuario</h3>
+
+                    <!-- Logo responsive -->
+                    <img src="{{ url_for('static', filename='img/logo.jpeg') }}" 
+                         alt="Logo" 
+                         class="img-fluid d-block mx-auto mb-3" 
+                         style="max-width: 150px;">
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de usuario</label>
+                            <input type="text" class="form-control" name="username" required placeholder="Tu nombre de usuario">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" name="password" required placeholder="••••••••">
+                        </div>
+
+                        {% if session.get('rol') == 'admin' %}
+                        <div class="mb-3">
+                            <label for="rol" class="form-label">Rol</label>
+                            <select name="rol" class="form-select">
+                                <option value="usuario">Usuario</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-primary w-100 py-2">Registrarme</button>
+                    </form>
+
+                    <p class="mt-3 text-center mb-0">
+                        ¿Ya tienes cuenta? 
+                        <a href="{{ url_for('login') }}" class="text-decoration-none fw-semibold">Inicia sesión</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

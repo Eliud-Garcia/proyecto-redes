@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Todos los Eventos{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">Todos los Eventos</h2>
+
+{% if eventos %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Descripción</th>
+                <th>Imagen</th>
+                <th>Creador</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in eventos %}
+            <tr>
+                <td>{{ e[0] }}</td>
+                <td>{{ e[2] }}</td>
+                <td>{{ e[3] }}</td>
+                <td>{{ e[4] }}</td>
+                <td>{{ e[5][:60] }}{% if e[5]|length > 60 %}...{% endif %}</td>
+                <td>
+                    {% if e[3] >= current_date %}
+                    <span class="badge bg-success">Activo</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>{{ e[1] }}</td>
+                <td>
+                    {% if e[7] == '' %}
+                    <span class="badge bg-success">Activo</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.get('username') and (session.get('username') == e[1] or session.get('rol') == 'admin')
+                    %}
+                    <a href="{{ url_for('editar_evento', evento_id=e[0]) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ url_for('eliminar_evento', evento_id=e[0]) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-center text-muted">No hay eventos registrados.</p>
+{% endif %}
+{% endblock %}

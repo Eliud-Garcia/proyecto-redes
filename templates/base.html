@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Eventos{% endblock %}</title>
+
+    <!-- Bootstrap local -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Estilos adicionales -->
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 🧭 Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <!-- Logo + Nombre -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logox.png') }}" alt="Logo" class="img-fluid me-2"
+                    style="height: 40px; max-width: 260px;">
+            </a>
+
+            <!-- Botón hamburguesa para móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Enlaces del menú -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if session.username %}
+                    <li class="nav-item d-flex align-items-center">
+                        <span class="navbar-text text-white me-3">👋 Hola, {{ session.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link bg-success me-1" href="{{ url_for('agregar_evento') }}">➕ Agregar evento</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link bg-danger me-1" href="{{ url_for('logout') }}">🚪 Cerrar sesión</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">🔐 Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">🧾 Registrarse</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🟨 Mensajes flash -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- 🧩 Contenido principal -->
+    <main class="container mt-4">
+        {% if session.get('rol') == 'admin' %}
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('eventos_todos') }}">Todos los eventos</a></li>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ⚓ Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <p class="mb-0">
+            <img src="{{ url_for('static', filename='img/udla.png') }}" alt="udla" class="img-fluid me-2"
+                style="height: 50px;">
+            <img src="{{ url_for('static', filename='img/logox.png') }}" alt="Logo" class="img-fluid me-2"
+                style="height: 40px;">
+
+
+        <p class="mb-0">© {{ current_year }} - Agenda Comunidad</p>
+        <p>Todos los derechos reservados</p>
+
+        </p>
+    </footer>
+
+    <!-- Bootstrap JS local -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+
+</html>
